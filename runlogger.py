@@ -6,6 +6,8 @@ import threading
 import sys
 import datetime
 import queue
+import dotenv
+import os
 
 
 import sdlogger
@@ -25,8 +27,13 @@ next time the database is available.
 '''
 
 # Get configuration
-with open("localconfig.json", "r") as f:
-	config = json.load(f)
+#with open("localconfig.json", "r") as f:
+#	config = json.load(f)
+dotenv.load_dotenv(dotenv_path='localenv.txt')
+
+print (os.getenv("ENPHASE_HOST"))
+
+
 
 
 
@@ -97,14 +104,14 @@ logger.info("----- STARTING -----")
 # Create the solar logger
 #
 sdlogger = sdlogger.SDLogger("local_cache.csv", 
-				config['solardb_name'],
-				config['solardb_table'],
-				config['solardb_user'],
-				config['solardb_pass'], 
-				config['solardb_host'], 
-				config['solardb_port'])
+				os.getenv('SOLARDB_NAME'),
+				os.getenv('SOLARDB_TABLE'),
+				os.getenv('SOLARDB_USER'),
+				os.getenv('SOLARDB_PASS'), 
+				os.getenv('SOLARDB_HOST'),
+				os.getenv('SOLARDB_PORT'))
 
-sdfetch = sdfetch.SDFetch(config.get('enphase_host', 'envoy.local'), config.get('enphase_port', 80))
+sdfetch = sdfetch.SDFetch(os.getenv('ENPHASE_HOST', 'envoy.local'), int(os.getenv('ENPHASE_PORT', 80)))
 
 
 #

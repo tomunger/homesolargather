@@ -10,7 +10,7 @@
 			"name": "runlogger.py",
 			"type": "python",
 			"request": "launch",
-			"program": "gathersolardata/runlogger.py",
+			"program": "runlogger.py",
 			"console": "integratedTerminal",
 			"justMyCode": false
 		},
