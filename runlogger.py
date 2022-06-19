@@ -13,6 +13,7 @@ import os
 import sdlogger
 import sditem
 import sdfetch
+import envoy
 
 '''
 Solar data logger.
@@ -56,7 +57,7 @@ rootLogger.addHandler(rfHandler)
 # Console handler that will report only warnings.
 consoleHandler = logging.StreamHandler(sys.stdout)
 consoleHandler.setFormatter(sharedformatter)
-consoleHandler.setLevel(logging.WARN)
+consoleHandler.setLevel(logging.DEBUG)
 rootLogger.addHandler(consoleHandler)
 
 # Create logger for this module.
@@ -111,7 +112,8 @@ sdlogger = sdlogger.SDLogger("local_cache.csv",
 				os.getenv('SOLARDB_HOST'),
 				os.getenv('SOLARDB_PORT'))
 
-sdfetch = sdfetch.SDFetch(os.getenv('ENPHASE_HOST', 'envoy.local'), int(os.getenv('ENPHASE_PORT', 80)))
+ev = envoy.EnvoySystem(os.getenv('ENPHASE_HOST', 'envoy.local'), int(os.getenv('ENPHASE_PORT', 80)))
+sdfetch = sdfetch.SDFetch(ev)
 
 
 #

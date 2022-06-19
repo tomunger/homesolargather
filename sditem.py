@@ -4,11 +4,11 @@ class SDItem(object):
 	'''
 	A single solar data item.
 	'''
-	def __init__(self, time: datetime, consumption: float, production: float):
+	def __init__(self, time: datetime, production: float, consumption: float):
 		self.time = time
-		self.consumption = consumption
 		self.production = production
+		self.consumption = consumption
 
 	def __str__(self):
-		return f"{self.time},{self.consumption},{self.production}"
+		return f"{self.time},{self.production},{self.consumption}"
 
