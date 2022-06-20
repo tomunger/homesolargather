@@ -23,8 +23,9 @@ class SDFetch(object):
 
 
 	def getSDItem(self) -> sditem.SDItem:
+		item = None
+		
 		pc = self._ev.get_power()
-
 		if pc is not None:
 			item = sditem.SDItem(datetime.datetime.now(), pc[0], pc[1])
 

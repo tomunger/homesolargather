@@ -132,6 +132,7 @@ t.start()
 #
 try:
 	while True:
+		# TODO:  Wrap this work in try and notify on exceptions.
 		item = sdfetch.getSDItem()
 		if item is not None:
 			q.put_nowait(item)
