@@ -5,7 +5,7 @@ import socket
 import datetime
 import requests
 import logging
-from evsystem import EVSystem
+from evsystem import EVSystem, EVSystemException
 from sditem import SDItem
 
 
@@ -46,6 +46,7 @@ class EnvoySystem(EVSystem):
 		self._meters: Dict(int, EnvoyMeter) = {}
 		self._eid_production: int = 0
 		self._eid_net_consumption: int = 0
+		self._session = requests.Session()
 
 		self._interrogate()
 
@@ -73,7 +74,7 @@ class EnvoySystem(EVSystem):
 			logger.debug("Trying to fetch from %s", url)
 			try: 
 				# download json from URL
-				r = requests.get(url, timeout=10)
+				r = self._session.get(url, timeout=10)
 
 				# parse json
 				rjson = r.json()
@@ -118,10 +119,22 @@ class EnvoySystem(EVSystem):
 
 		for m in self._meters.values():
 			if m.measurementType == "production":
+				# raise an exception if self._eid_production is already set
+				if self._eid_production > 0:
+					raise EVSystemException("Multiple production meters found")
 				self._eid_production = m.eid
 			elif m.measurementType == "net-consumption":
+				# raise an exception if self._eid_production is already set
+				if self._eid_net_consumption > 0:
+					raise EVSystemException("Multiple net-consumption meters found")
 				self._eid_net_consumption = m.eid
-		
+
+		if self._eid_production == 0:
+			raise EVSystemException("No production meter found")
+		if self._eid_net_consumption == 0:
+			raise EVSystemException("No net-consumption meter found")
+
+
 		self._is_interrogated = True
 
 

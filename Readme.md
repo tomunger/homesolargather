@@ -23,6 +23,28 @@ To build:
 
 	docker build -t gathersolar .
 
+`-t` tags the build
+
+To build multi-platoform:
+
+	docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t tomunger/gathersolar:0.2.0 --push .
+
 To run:
 
-	docker run -it --rm --name gathersolarrun gathersolar
+	docker run -d --env-file localenv-prod.txt --name homesolargather tomunger/homesolargather:0.2.0 
+
+	
+
+
+`-it` adds a pseudo terminal so you can see what it is doing.
+
+`--rm` removes the container on exit
+
+`--env-file <file>` reads environment variables from a file
+
+`--name` Names the container
+
+
+docker run in background
+
+	

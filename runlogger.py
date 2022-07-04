@@ -132,14 +132,20 @@ t.start()
 #
 try:
 	while True:
-		# TODO:  Wrap this work in try and notify on exceptions.
-		item = sdfetch.getSDItem()
-		if item is not None:
-			q.put_nowait(item)
-			print (f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}: {item.production:.1f} - {item.consumption:.1f} -> {item.production - item.consumption:.1f}")
-		else:
-			print (f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}: no data captured")
-		# TODO:  more precise sleep time so we are closer to every even 10 seconds.
+		try:
+			item = sdfetch.getSDItem()
+			if item is not None:
+				q.put_nowait(item)
+				print (f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}: {item.production:.1f} - {item.consumption:.1f} -> {item.production - item.consumption:.1f}")
+			else:
+				print (f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}: no data captured")
+			# TODO:  more precise sleep time so we are closer to every even 10 seconds.
+		except KeyboardInterrupt:
+			raise
+		except Exception as e:
+			logger.error("Unexpected exception: %s", str(e), exc_info=True)
+			# TODO:  Notify
+
 		time.sleep(10)
 except KeyboardInterrupt:
 	logger.warning ("Keyboard interrupt")
